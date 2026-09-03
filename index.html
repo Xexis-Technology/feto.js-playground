@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Feto.js — Documentation & Live Playground</title>
-  <meta name="description" content="Feto.js v0.8.0 — A lightweight JavaScript HTTP client built on the native Fetch API.">
+  <meta name="description" content="Feto.js v1.0.0 — A lightweight JavaScript HTTP client built on the native Fetch API.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="style.css">
 </head>
@@ -20,7 +20,7 @@
         </svg>
       </button>
       <a href="#hero" class="header-brand">Feto.js</a>
-      <span class="header-version">v0.8.0</span>
+      <span class="header-version">v1.0.0</span>
     </div>
     <div class="header-right">
       <a href="https://www.npmjs.com/package/feto.js" target="_blank" rel="noopener" class="header-link"><i class="fa-brands fa-npm"></i> npm</a>
@@ -51,6 +51,9 @@
       </div>
       <div class="sidebar-section">
         <div class="sidebar-heading">Features</div>
+        <a href="#create" class="sidebar-link" data-section="create"><i class="fa-solid fa-cube"></i> Feto.create()</a>
+        <a href="#base-url" class="sidebar-link" data-section="base-url"><i class="fa-solid fa-link"></i> Base URL</a>
+        <a href="#params" class="sidebar-link" data-section="params"><i class="fa-solid fa-question"></i> Query Params</a>
         <a href="#headers" class="sidebar-link" data-section="headers"><i class="fa-solid fa-bars"></i> Headers</a>
         <a href="#auth" class="sidebar-link" data-section="auth"><i class="fa-solid fa-key"></i> Authentication</a>
         <a href="#timeout" class="sidebar-link" data-section="timeout"><i class="fa-solid fa-clock"></i> Timeout</a>
@@ -60,6 +63,8 @@
         <a href="#cache" class="sidebar-link" data-section="cache"><i class="fa-solid fa-hard-drive"></i> Cache</a>
         <a href="#dedup" class="sidebar-link" data-section="dedup"><i class="fa-solid fa-layer-group"></i> Deduplication</a>
         <a href="#formdata" class="sidebar-link" data-section="formdata"><i class="fa-solid fa-file"></i> FormData</a>
+        <a href="#duration" class="sidebar-link" data-section="duration"><i class="fa-solid fa-stopwatch"></i> Duration</a>
+        <a href="#typescript" class="sidebar-link" data-section="typescript"><i class="fa-solid fa-code"></i> TypeScript</a>
       </div>
       <div class="sidebar-section">
         <div class="sidebar-heading">Tools</div>
@@ -139,20 +144,92 @@
       <div class="code-block">
         <div class="code-header">
           <span class="code-lang">html</span>
-          <button class="copy-btn" data-copy='<script src="https://unpkg.com/feto.js@0.8.0/dist/feto.min.js"></script>'><i class="fa-solid fa-copy"></i> Copy</button>
+          <button class="copy-btn" data-copy='<script src="https://unpkg.com/feto.js@1.0.0/dist/feto.min.js"></script>'><i class="fa-solid fa-copy"></i> Copy</button>
         </div>
-        <pre><code>&lt;script src="https://unpkg.com/feto.js@0.8.0/dist/feto.min.js"&gt;&lt;/script&gt;</code></pre>
+        <pre><code>&lt;script src="https://unpkg.com/feto.js@1.0.0/dist/feto.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
       <h3>jsDelivr</h3>
       <div class="code-block">
         <div class="code-header">
           <span class="code-lang">html</span>
-          <button class="copy-btn" data-copy='<script src="https://cdn.jsdelivr.net/npm/feto.js@0.8.0/dist/feto.min.js"></script>'><i class="fa-solid fa-copy"></i> Copy</button>
+          <button class="copy-btn" data-copy='<script src="https://cdn.jsdelivr.net/npm/feto.js@1.0.0/dist/feto.min.js"></script>'><i class="fa-solid fa-copy"></i> Copy</button>
         </div>
-        <pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/feto.js@0.8.0/dist/feto.min.js"&gt;&lt;/script&gt;</code></pre>
+        <pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/feto.js@1.0.0/dist/feto.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
       <button class="btn btn-primary" id="testCdnBtn"><i class="fa-solid fa-vial"></i> Test CDN</button>
       <div class="status-box" id="cdnStatus" style="display:none;"></div>
+    </section>
+
+    <!-- Feto.create() -->
+    <section class="section" id="create">
+      <h2 class="section-title"><i class="fa-solid fa-cube"></i> Feto.create()</h2>
+      <p class="section-desc">Create a reusable instance with default configuration.</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">javascript</span>
+          <button class="copy-btn" data-copy='const api = Feto.create({\n  baseURL: "https://jsonplaceholder.typicode.com",\n  timeout: 10000,\n  retry: 2,\n  retryBackoff: "exponential",\n  headers: { "X-App-Version": "1.0" }\n});\n\nconst res = await api.get("/posts/1");\nconsole.log(res.data);'><i class="fa-solid fa-copy"></i> Copy</button>
+        </div>
+        <pre><code>const api = Feto.create({
+  baseURL: "https://jsonplaceholder.typicode.com",
+  timeout: 10000,
+  retry: 2,
+  retryBackoff: "exponential",
+  headers: { "X-App-Version": "1.0" }
+});
+
+const res = await api.get("/posts/1");
+console.log(res.data);</code></pre>
+      </div>
+      <button class="btn btn-primary run-example" data-example="create"><i class="fa-solid fa-play"></i> Run Example</button>
+      <div class="response-viewer" id="response-create" style="display:none;"></div>
+    </section>
+
+    <!-- Base URL -->
+    <section class="section" id="base-url">
+      <h2 class="section-title"><i class="fa-solid fa-link"></i> Base URL</h2>
+      <p class="section-desc">Safe URL combination with absolute URL override.</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">javascript</span>
+          <button class="copy-btn" data-copy='const api = Feto.create({ baseURL: "https://jsonplaceholder.typicode.com" });\n\n// Relative path => combines with baseURL\nawait api.get("/posts/1");\n// => https://jsonplaceholder.typicode.com/posts/1\n\n// Absolute URL => baseURL ignored\nawait api.get("https://httpbin.org/get");'><i class="fa-solid fa-copy"></i> Copy</button>
+        </div>
+        <pre><code>const api = Feto.create({
+  baseURL: "https://jsonplaceholder.typicode.com"
+});
+
+// Relative path => combines with baseURL
+await api.get("/posts/1");
+// => https://jsonplaceholder.typicode.com/posts/1
+
+// Absolute URL => baseURL ignored
+await api.get("https://httpbin.org/get");</code></pre>
+      </div>
+      <button class="btn btn-primary run-example" data-example="baseurl"><i class="fa-solid fa-play"></i> Run Example</button>
+      <div class="response-viewer" id="response-baseurl" style="display:none;"></div>
+    </section>
+
+    <!-- Query Params -->
+    <section class="section" id="params">
+      <h2 class="section-title"><i class="fa-solid fa-question"></i> Query Parameters</h2>
+      <p class="section-desc">Add query parameters with automatic URL encoding.</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">javascript</span>
+          <button class="copy-btn" data-copy='const res = await Feto.get("https://httpbin.org/get", {\n  params: { page: 1, limit: 20, search: "hello world" }\n});\n\nconsole.log(res.data.args);'><i class="fa-solid fa-copy"></i> Copy</button>
+        </div>
+        <pre><code>const res = await Feto.get("https://httpbin.org/get", {
+  params: {
+    page: 1,
+    limit: 20,
+    search: "hello world"
+  }
+});
+
+console.log(res.data.args);
+// => { page: "1", limit: "20", search: "hello world" }</code></pre>
+      </div>
+      <button class="btn btn-primary run-example" data-example="params"><i class="fa-solid fa-play"></i> Run Example</button>
+      <div class="response-viewer" id="response-params" style="display:none;"></div>
     </section>
 
     <!-- GET -->
@@ -369,21 +446,24 @@ controller.abort();</code></pre>
     <!-- Retry -->
     <section class="section" id="retry">
       <h2 class="section-title"><i class="fa-solid fa-rotate-right"></i> Retry</h2>
-      <p class="section-desc">Automatically retry failed requests.</p>
+      <p class="section-desc">Automatically retry failed requests with fixed or exponential backoff.</p>
       <div class="code-block">
         <div class="code-header">
           <span class="code-lang">javascript</span>
-          <button class="copy-btn" data-copy='const response = await Feto.get("https://jsonplaceholder.typicode.com/posts/1", {\n  retry: 3,\n  retryDelay: 500\n});'><i class="fa-solid fa-copy"></i> Copy</button>
+          <button class="copy-btn" data-copy='// Fixed delay\nawait Feto.get(url, { retry: 3, retryDelay: 500 });\n\n// Exponential backoff\nawait Feto.get(url, {\n  retry: 3,\n  retryDelay: 500,\n  retryBackoff: "exponential"\n});\n// Delays: 500ms, 1000ms, 2000ms'><i class="fa-solid fa-copy"></i> Copy</button>
         </div>
-        <pre><code>const response = await Feto.get(
-  "https://jsonplaceholder.typicode.com/posts/1",
-  {
-    retry: 3,
-    retryDelay: 500
-  }
-);</code></pre>
+        <pre><code>// Fixed delay
+await Feto.get(url, { retry: 3, retryDelay: 500 });
+
+// Exponential backoff
+await Feto.get(url, {
+  retry: 3,
+  retryDelay: 500,
+  retryBackoff: "exponential"
+});
+// Delays: 500ms, 1000ms, 2000ms</code></pre>
       </div>
-      <p class="section-desc"><code>retry: 3</code> means 1 initial request + up to 3 retries on failure.</p>
+      <p class="section-desc"><code>retry: 3</code> means 1 initial request + up to 3 retries on failure. Use <code>retryBackoff: "exponential"</code> for increasing delays between retries.</p>
       <button class="btn btn-primary run-example" data-example="retry"><i class="fa-solid fa-play"></i> Run Example</button>
       <div class="response-viewer" id="response-retry" style="display:none;"></div>
     </section>
@@ -422,7 +502,7 @@ Feto.interceptors.response.eject(resId);</code></pre>
       <div class="code-block">
         <div class="code-header">
           <span class="code-lang">javascript</span>
-          <button class="copy-btn" data-copy='const response = await Feto.get("https://jsonplaceholder.typicode.com/posts/1", {\n  cache: true,\n  ttl: 30000\n});\n\nconsole.log(response.fromCache);'><i class="fa-solid fa-copy"></i> Copy</button>
+          <button class="copy-btn" data-copy='const response = await Feto.get("https://jsonplaceholder.typicode.com/posts/1", {\n  cache: true,\n  ttl: 30000\n});\n\nconsole.log(response.fromCache);\n\n// Cache API\nFeto.cache.clear();\nFeto.cache.has(key);\nFeto.cache.delete(key);'><i class="fa-solid fa-copy"></i> Copy</button>
         </div>
         <pre><code>const response = await Feto.get(
   "https://jsonplaceholder.typicode.com/posts/1",
@@ -432,7 +512,12 @@ Feto.interceptors.response.eject(resId);</code></pre>
   }
 );
 
-console.log(response.fromCache);</code></pre>
+console.log(response.fromCache);
+
+// Cache API
+Feto.cache.clear();      // Clear all entries
+Feto.cache.has(key);     // Check if key exists
+Feto.cache.delete(key);  // Delete specific entry</code></pre>
       </div>
       <div class="btn-group">
         <button class="btn btn-primary" id="cacheFirstBtn"><i class="fa-solid fa-download"></i> First Request</button>
@@ -487,6 +572,58 @@ const response = await Feto.post("https://httpbin.org/post", form);</code></pre>
       <input type="email" class="text-input" id="formDataEmail" value="hello@feto.js" />
       <button class="btn btn-primary run-example" data-example="formdata"><i class="fa-solid fa-play"></i> Run Example</button>
       <div class="response-viewer" id="response-formdata" style="display:none;"></div>
+    </section>
+
+    <!-- Request Duration -->
+    <section class="section" id="duration">
+      <h2 class="section-title"><i class="fa-solid fa-stopwatch"></i> Request Duration</h2>
+      <p class="section-desc">Every response includes timing metadata.</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">javascript</span>
+          <button class="copy-btn" data-copy='const res = await Feto.get("https://jsonplaceholder.typicode.com/posts/1");\nconsole.log(res.duration); // e.g. 243 (ms)\n\n// Cached responses have duration: 0\nconst cached = await Feto.get(url, { cache: true, ttl: 60000 });\nconsole.log(cached.duration); // 0'><i class="fa-solid fa-copy"></i> Copy</button>
+        </div>
+        <pre><code>const res = await Feto.get("https://jsonplaceholder.typicode.com/posts/1");
+console.log(res.duration); // e.g. 243 (ms)
+
+// Cached responses have duration: 0
+const cached = await Feto.get(url, { cache: true, ttl: 60000 });
+console.log(cached.duration); // 0</code></pre>
+      </div>
+      <button class="btn btn-primary run-example" data-example="duration"><i class="fa-solid fa-play"></i> Run Example</button>
+      <div class="response-viewer" id="response-duration" style="display:none;"></div>
+    </section>
+
+    <!-- TypeScript -->
+    <section class="section" id="typescript">
+      <h2 class="section-title"><i class="fa-solid fa-code"></i> TypeScript</h2>
+      <p class="section-desc">TypeScript declarations are included.</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">typescript</span>
+          <button class="copy-btn" data-copy='import Feto, { FetoInstance, RequestOptions, Response } from "feto.js";\n\nconst api: FetoInstance = Feto.create({\n  baseURL: "https://api.example.com"\n});\n\nconst res: Response = await api.get("/users");\nconsole.log(res.data);'><i class="fa-solid fa-copy"></i> Copy</button>
+        </div>
+        <pre><code>import Feto, {
+  FetoInstance,
+  RequestOptions,
+  Response,
+  CreateOptions,
+  HttpError,
+  TimeoutError,
+  AbortError,
+  NetworkError,
+  InterceptorManager,
+  Auth,
+  InstanceCache
+} from "feto.js";
+
+const api: FetoInstance = Feto.create({
+  baseURL: "https://api.example.com"
+});
+
+const res: Response = await api.get("/users");
+console.log(res.data);</code></pre>
+      </div>
     </section>
 
     <!-- Playground -->
@@ -544,6 +681,8 @@ const response = await Feto.post("https://httpbin.org/post", form);</code></pre>
           <tr><th>API</th><th>Description</th></tr>
         </thead>
         <tbody>
+          <tr><td><code>Feto.create(options)</code></td><td>Create a reusable instance</td></tr>
+          <tr><td><code>Feto.VERSION</code></td><td>Library version string</td></tr>
           <tr><td><code>Feto.get(url, options)</code></td><td>Make a GET request</td></tr>
           <tr><td><code>Feto.post(url, data, options)</code></td><td>Make a POST request</td></tr>
           <tr><td><code>Feto.put(url, data, options)</code></td><td>Make a PUT request</td></tr>
@@ -553,6 +692,8 @@ const response = await Feto.post("https://httpbin.org/post", form);</code></pre>
           <tr><td><code>Feto.auth.getToken()</code></td><td>Get stored token</td></tr>
           <tr><td><code>Feto.auth.clearToken()</code></td><td>Clear stored token</td></tr>
           <tr><td><code>Feto.cache.clear()</code></td><td>Clear all cached responses</td></tr>
+          <tr><td><code>Feto.cache.has(key)</code></td><td>Check if cache key exists</td></tr>
+          <tr><td><code>Feto.cache.delete(key)</code></td><td>Delete a specific cache entry</td></tr>
           <tr><td><code>Feto.interceptors.request.use(handler)</code></td><td>Add request interceptor (returns id)</td></tr>
           <tr><td><code>Feto.interceptors.request.eject(id)</code></td><td>Remove request interceptor</td></tr>
           <tr><td><code>Feto.interceptors.response.use(handler)</code></td><td>Add response interceptor (returns id)</td></tr>
@@ -570,8 +711,42 @@ const response = await Feto.post("https://httpbin.org/post", form);</code></pre>
           <tr><td><code>signal</code></td><td>AbortSignal</td><td>For manual cancellation</td></tr>
           <tr><td><code>retry</code></td><td>Number</td><td>Number of retry attempts</td></tr>
           <tr><td><code>retryDelay</code></td><td>Number</td><td>Delay between retries (ms)</td></tr>
+          <tr><td><code>retryBackoff</code></td><td>String</td><td>"fixed" or "exponential"</td></tr>
           <tr><td><code>cache</code></td><td>Boolean</td><td>Enable caching (GET only)</td></tr>
           <tr><td><code>ttl</code></td><td>Number</td><td>Cache lifetime in milliseconds</td></tr>
+          <tr><td><code>params</code></td><td>Object</td><td>Query parameters (auto-encoded)</td></tr>
+        </tbody>
+      </table>
+      <h3>Create Options</h3>
+      <table class="api-table">
+        <thead>
+          <tr><th>Option</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>baseURL</code></td><td>String</td><td>Base URL for relative paths</td></tr>
+          <tr><td><code>headers</code></td><td>Object</td><td>Default headers</td></tr>
+          <tr><td><code>timeout</code></td><td>Number</td><td>Default timeout</td></tr>
+          <tr><td><code>retry</code></td><td>Number</td><td>Default retry count</td></tr>
+          <tr><td><code>retryDelay</code></td><td>Number</td><td>Default retry delay</td></tr>
+          <tr><td><code>retryBackoff</code></td><td>String</td><td>Default backoff strategy</td></tr>
+          <tr><td><code>token</code></td><td>String</td><td>Default Bearer token</td></tr>
+          <tr><td><code>cache</code></td><td>Boolean</td><td>Default cache setting</td></tr>
+          <tr><td><code>ttl</code></td><td>Number</td><td>Default TTL</td></tr>
+        </tbody>
+      </table>
+      <h3>Response Object</h3>
+      <table class="api-table">
+        <thead>
+          <tr><th>Property</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>data</code></td><td>Any</td><td>Parsed response data</td></tr>
+          <tr><td><code>status</code></td><td>Number</td><td>HTTP status code</td></tr>
+          <tr><td><code>statusText</code></td><td>String</td><td>HTTP status text</td></tr>
+          <tr><td><code>headers</code></td><td>Object</td><td>Response headers</td></tr>
+          <tr><td><code>ok</code></td><td>Boolean</td><td>Whether status is 200-299</td></tr>
+          <tr><td><code>fromCache</code></td><td>Boolean</td><td>Whether from cache</td></tr>
+          <tr><td><code>duration</code></td><td>Number</td><td>Request duration (ms)</td></tr>
         </tbody>
       </table>
     </section>
@@ -581,25 +756,25 @@ const response = await Feto.post("https://httpbin.org/post", form);</code></pre>
       <h2 class="section-title"><i class="fa-solid fa-triangle-exclamation"></i> Error Reference</h2>
       <table class="api-table">
         <thead>
-          <tr><th>Error</th><th>When</th></tr>
+          <tr><th>Error</th><th>When</th><th>Properties</th></tr>
         </thead>
         <tbody>
-          <tr><td><code>HttpError</code></td><td>Server returned 4xx/5xx status</td></tr>
-          <tr><td><code>TimeoutError</code></td><td>Request exceeded the configured timeout</td></tr>
-          <tr><td><code>AbortError</code></td><td>Request was cancelled via AbortController</td></tr>
-          <tr><td><code>NetworkError</code></td><td>Failed to reach the server</td></tr>
+          <tr><td><code>HttpError</code></td><td>Server returned 4xx/5xx status</td><td><code>status</code>, <code>statusText</code>, <code>response</code>, <code>config</code></td></tr>
+          <tr><td><code>TimeoutError</code></td><td>Request exceeded the configured timeout</td><td><code>config</code></td></tr>
+          <tr><td><code>AbortError</code></td><td>Request was cancelled via AbortController</td><td><code>config</code></td></tr>
+          <tr><td><code>NetworkError</code></td><td>Failed to reach the server</td><td><code>config</code>, <code>originalError</code></td></tr>
         </tbody>
       </table>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
-      <p>Feto.js v0.8.0 — Lightweight JavaScript HTTP Client</p>
+      <p>Feto.js v1.0.0 — Lightweight JavaScript HTTP Client</p>
       <p>MIT License &copy; 2026 Xexis Technology</p>
       <div class="footer-links">
         <a href="https://github.com/Xexis-Technology/feto.js" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a>
         <a href="https://www.npmjs.com/package/feto.js" target="_blank" rel="noopener"><i class="fa-brands fa-npm"></i> npm</a>
-        <a href="https://unpkg.com/feto.js@0.8.0/dist/feto.min.js" target="_blank" rel="noopener"><i class="fa-solid fa-cloud"></i> CDN</a>
+        <a href="https://unpkg.com/feto.js@1.0.0/dist/feto.min.js" target="_blank" rel="noopener"><i class="fa-solid fa-cloud"></i> CDN</a>
       </div>
     </footer>
 
@@ -608,7 +783,7 @@ const response = await Feto.post("https://httpbin.org/post", form);</code></pre>
   <!-- Overlay for mobile sidebar -->
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-  <script src="https://unpkg.com/feto.js@0.8.0/dist/feto.min.js"></script>
+  <script src="https://unpkg.com/feto.js@1.0.0/dist/feto.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

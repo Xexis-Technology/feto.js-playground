@@ -106,7 +106,7 @@
       else if (method === "PATCH") res = await Feto.patch(url, options.body, options);
       else if (method === "DELETE") res = await Feto.delete(url, options);
       var elapsed = Date.now() - start;
-      return { status: res.status, statusText: res.statusText, ok: res.ok, headers: res.headers, body: res.data, time: elapsed, fromCache: res.fromCache };
+      return { status: res.status, statusText: res.statusText, ok: res.ok, headers: res.headers, body: res.data, time: res.duration || elapsed, fromCache: res.fromCache };
     } catch (err) {
       var elapsed = Date.now() - start;
       return { error: err.name + ": " + err.message, time: elapsed };
@@ -133,6 +133,20 @@
       try {
         var result;
         switch (ex) {
+          case "create":
+            var api = Feto.create({ baseURL: "https://jsonplaceholder.typicode.com" });
+            var apiRes = await api.get("/posts/1");
+            result = { status: apiRes.status, statusText: apiRes.statusText, ok: apiRes.ok, headers: apiRes.headers, body: apiRes.data, time: apiRes.duration, fromCache: apiRes.fromCache, info: "Feto.create() instance with baseURL" };
+            break;
+          case "baseurl":
+            var api2 = Feto.create({ baseURL: "https://jsonplaceholder.typicode.com" });
+            var apiRes2 = await api2.get("/posts/1");
+            result = { status: apiRes2.status, statusText: apiRes2.statusText, ok: apiRes2.ok, body: apiRes2.data, time: apiRes2.duration, info: "baseURL + /posts/1 combined safely" };
+            break;
+          case "params":
+            var paramsRes = await Feto.get("https://httpbin.org/get", { params: { page: "1", limit: "20", search: "hello world" } });
+            result = { status: paramsRes.status, statusText: paramsRes.statusText, ok: paramsRes.ok, body: paramsRes.data, time: paramsRes.duration, info: "Query params encoded automatically" };
+            break;
           case "get":
             result = await runRequest("GET", "https://jsonplaceholder.typicode.com/posts/1", {});
             break;
@@ -198,6 +212,10 @@
             form.append("name", document.getElementById("formDataName").value);
             form.append("email", document.getElementById("formDataEmail").value);
             result = await runRequest("POST", "https://httpbin.org/post", { body: form });
+            break;
+          case "duration":
+            var durRes = await Feto.get("https://jsonplaceholder.typicode.com/posts/1");
+            result = { status: durRes.status, statusText: durRes.statusText, ok: durRes.ok, body: durRes.data, time: durRes.duration, info: "duration: " + durRes.duration + "ms" };
             break;
         }
         renderResponse(container, result);
